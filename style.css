@@ -1,113 +1,124 @@
-body{
-    font-family: 'Open-sans', sans-serif;
-    background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRv2TjYMjBFIe1G_BBD96uUEn4NVU56jsGDGQ&usqp=CAU");
-    background-size: cover;
-    background-attachment: fixed;
-    height: 100vh;
-    position: relative;
-}
-
-body::after{
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 50%;
-    height: 100%;
-    width: 900px;
-    background: rgba(0,0,0,.6);
-    background-attachment: fixed;
-    z-index: -1;
-    transform: translate(-50%);
-}
-
-p {
-    font-size: 1.6rem;
-    line-height: 1.5;
-}
-
-img {
-    width: 100%;
-}
-
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-header .container {
-    padding: 4rem 0;
-    text-align: center;
-    background-color: rgb(182, 90, 14);
-    border-radius: 0 0 5rem 5rem;
-    margin-bottom: 2rem;
-}
-
-header h1 {
-    font-size: 3rem;
-    color: #fff;
-    padding-bottom: 1rem;
-}
-
-form input, 
-form button{
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  button:active {
+    transform: scale(0.95);
+  }
+  
+  input:focus,
+  button:focus {
     outline: none;
-    border: none;
-    padding: 1rem;
-    font-size: 1.6rem;
-    font-family: inherit;
-}
-
-form input {
-    width: 50%;
-    border-radius: 1rem 0 1rem 0;
-    margin-right: 3px;
-    border-bottom: 5px solid rgb(117, 16, 156);
-}
-
-form button {
-    background-color: rgb(117, 16, 156);
+  }
+  
+  header {
+    background-image: url('https://images.unsplash.com/photo-1510915361894-db8b60106cb1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
     color: #fff;
-    border: 1ps solid transparent;
-    border-radius: 3px;
-    transition: all .3s;
-}
-
-form button:hover{
-    border: 1px solid #fff;
-}
-
-section .container{
-    display: block;
-    margin-right: 0 auto;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 0;
+    position: relative;
+  }
+  
+  header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  header * {
+    z-index: 1;
+  }
+  
+  header h1 {
+    margin: 0 0 30px;
+  }
+  
+  form {
+    position: relative;
+    width: 500px;
+    max-width: 100%;
+  }
+  
+  form input {
+    border: 0;
+    border-radius: 50px;
+    font-size: 16px;
+    padding: 15px 30px;
+    width: 100%;
+  }
+  
+  form button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: #e056fd;
+    border: 0;
+    border-radius: 50px;
     color: #fff;
-    padding: 3rem 0;
-}
-
-.songs{
-    width: 70%;
-    list-style: none;
-    margin: 0 auto;
-    padding: 2rem 0;
-}
-
-.songs li {
-    font-size: 1.4rem;
+    font-size: 16px;
+    padding: 13px 30px;
+  }
+  
+  .btn {
+    background-color: #8d56fd;
+    border: 0;
+    border-radius: 10px;
+    color: #fff;
+    padding: 4px 10px;
+  }
+  
+  ul.songs {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  ul.songs li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+  }
+  
+  .container {
+    margin: 30px auto;
+    max-width: 100%;
+    width: 500px;
+  }
+  
+  .container h2 {
+    font-weight: 300;
+  }
+  
+  .container p {
     text-align: center;
+  }
+  
+  .centered {
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 5px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.songs li span {
-    font-size: 1.4rem;
-    background-color: rgb(117, 16, 156);
-    padding: 5px;
-    margin: 5px;
-    outline: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+  }
+  
+  .centered button {
+    transform: scale(1.3);
+    margin: 15px;
+  }

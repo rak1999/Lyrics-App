@@ -1,83 +1,99 @@
-const form = document.getElementById("form");
-const Search = document.getElementById("search");
-const result = document.getElementById("result");
+const form = document.getElementById('form');
+const search = document.getElementById('search');
+const result = document.getElementById('result');
+const more = document.getElementById('more');
 
-var api = "https://api.lyrics.ovh";
+const apiURL = 'https://api.lyrics.ovh';
 
-form.addEventListener("submit", e => {
-    e.preventDefault();
-    let searchValue = search.value.trim();
+// Search by song or artist
+async function searchSongs(term) {
+  const res = await fetch(`${apiURL}/suggest/${term}`);
+  const data = await res.json();
 
-    if(!searchValue) {
-        alert("Nothing to Search");
-    } else {
-        beginSearch(searchValue);
-    }
-})
-
-// Create Search Function
-
-async function beginSearch(searchValue){
-    const searchResult = await fetch(`${api}/suggest/${searchValue}`);
-    const data = await searchResult.json();
-
-    // console.log(data);
-    displayData(data);
+  showData(data);
 }
 
-//Display Search Result
+// Show song and artist in DOM
+function showData(data) {
+  result.innerHTML = `
+    <ul class="songs">
+      ${data.data
+        .map(
+          song => `<li>
+      <span><strong>${song.artist.name}</strong> - ${song.title}</span>
+      <button class="btn" data-artist="${song.artist.name}" data-songtitle="${song.title}">Get Lyrics</button>
+    </li>`
+        )
+        .join('')}
+    </ul>
+  `;
 
-function displayData(data){
-    result.innerHTML = 
-    `
-        <ul class = "songs">
-            ${data.data.map( song => 
-            `
-                <li>
-                    <div>
-                        <strong>
-                            ${song.artist.name}
-                        </strong> - ${song.title}
-                    </div> 
-                    <span data-artist = "${song.artist.name}" data.songtitle = "${song.title}">
-                        Get Lyrics
-                    </span>
-                </li>
-            `
-            ).join('')}
-        </ul>
+  if (data.prev || data.next) {
+    more.innerHTML = `
+      ${
+        data.prev
+          ? `<button class="btn" onclick="getMoreSongs('${data.prev}')">Prev</button>`
+          : ''
+      }
+      ${
+        data.next
+          ? `<button class="btn" onclick="getMoreSongs('${data.next}')">Next</button>`
+          : ''
+      }
     `;
+  } else {
+    more.innerHTML = '';
+  }
 }
 
-// Get Lyrics Function
+// Get prev and next songs
+async function getMoreSongs(url) {
+  const res = await fetch(`https://cors-anywhere.herokuapp.com/${url}`);
+  const data = await res.json();
 
-result.addEventListener("click" , e => {
-    const clickedEle = e.target;
+  showData(data);
+}
 
-    // check get lyrics button
-    if(clickedEle.tagName === 'SPAN'){
-        const artist = clickedEle.getAttribute('data-artist');
-        const songTitle = clickedEle.getAttribute('data-songtitle');
-
-        getLyrics(artist, songTitle);
-    }
-})
-
+// Get lyrics for song
 async function getLyrics(artist, songTitle) {
-    const response = await fetch(`${api}/v1/${artist}/${songTitle}`);
-    const data = await response.json();
-    console.log(data);
-    const lyrics = data.lyrics.replace(/(\r\n|\r|\n)/g , '<br>');
-    console.log(lyrics);
-    result.innerHTML =
-    `
-        <h2>
-            <strong>
-                ${artist}
-            </strong> - ${songTitle}
-        </h2>
-        <p>
-            ${lyrics}
-        </p>
-    `;
+  const res = await fetch(`${apiURL}/v1/${artist}/${songTitle}`);
+  const data = await res.json();
+
+   if (data.error) {
+        result.innerHTML = data.error;
+   } else {
+        const lyrics = data.lyrics.replace(/(\r\n|\r|\n)/g, '<br>');
+
+        result.innerHTML = `
+            <h2><strong>${artist}</strong> - ${songTitle}</h2>
+            <span>${lyrics}</span>
+        `;
+  }
+
+  more.innerHTML = '';
 }
+
+// Event listeners
+form.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const searchTerm = search.value.trim();
+
+  if (!searchTerm) {
+    alert('Please type in a search term');
+  } else {
+    searchSongs(searchTerm);
+  }
+});
+
+// Get lyrics button click
+result.addEventListener('click', e => {
+  const clickedEl = e.target;
+
+  if (clickedEl.tagName === 'BUTTON') {
+    const artist = clickedEl.getAttribute('data-artist');
+    const songTitle = clickedEl.getAttribute('data-songtitle');
+
+    getLyrics(artist, songTitle);
+  }
+});
